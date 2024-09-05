@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>.NEXT25</title>
+  </head>
+  <body>
+    <canvas id="canvas" width="960" height="540"></canvas>
+    
+
+    <script src="https://unpkg.com/@rive-app/canvas@2.20.0"></script>
+    <script>
+      const r = new rive.Rive({
+        src: "rives/nexthero25.riv",
+        canvas: document.getElementById("canvas"),
+        autoplay: true,
+        // artboard: "Arboard", // Optional. If not supplied the default is selected
+        stateMachines: "next25",
+        onLoad: () => {
+          // Ensure the drawing surface matches the canvas size and device pixel ratio
+          r.resizeDrawingSurfaceToCanvas();
+        },
+      });
+
+      // Resize the drawing surface if the window resizes
+  /*     window.addEventListener("resize", () => {
+    r.resizeDrawingSurfaceToCanvas();
+}); */
+    </script>
+  </body>
+</html>
