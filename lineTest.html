@@ -1,0 +1,189 @@
+<div class="line-container" id="line-1"></div>
+    <div class="line-abs">
+        <div class="line-left"></div>
+        <div class="line-horizontal"></div>
+        <div class="circle"></div>
+        <div class="mask"></div>
+    </div>
+</div>
+<div class="line-container" id="line-2" style="display: none;">
+    <div class="line-abs">
+        <div class="line-left"></div>
+        <div class="line-horizontal"></div>
+        <div class="circle"></div>
+        <div class="mask"></div>
+    </div>
+</div>
+<div class="line-container" id="line-3" style="display: none;">
+    <div class="line-abs">
+        <div class="line-left"></div>
+        <div class="line-horizontal"></div>
+        <div class="circle"></div>
+        <div class="mask"></div>
+    </div>
+</div>
+<style>
+ /* Kontejner za čitavu liniju */
+        .line-container {
+            position: relative;
+            height: 220px; /* ukupna visina */
+            width: 0; /* Start with 0 width */
+           /*animation: animateWidth 1.2s .9s forwards; /* Dodato kašnjenje od 0.8 sekundi */
+        }
+        .line-abs {
+            position: absolute;
+            width: 0;
+            height: 100%;
+            top: -80px;
+            left: -120px;
+            overflow: hidden;
+            z-index: -1;
+            
+            /* animation-fill-mode: forwards;
+            animation-iteration-count: 1; */
+        }
+      
+        @keyframes animateWidth {
+            0% {
+                width: 0;
+            }
+            100% {
+                width: 90vw; /* Original width reached after 1 second */
+            }
+        }
+        /* Gornji levi deo linije (ukoso) */
+        .line-left {
+            position: absolute;
+            width: 22px; /* širina linije */
+            height: 200px; /* visina */
+            background-color: #14AEC3; /* boja linije */
+            top: 0;
+            left: 0;
+            transform: skewY(-45deg); /* pravimo ugao */
+            transform-origin: top left;
+            transform: rotate(-35deg);
+        }
+        /* Horizontalni deo linije */
+        .line-horizontal {
+            position: absolute;
+            height: 22px; /* širina linije */
+            width: 350px; /* dužina linije */
+            background-color: #14AEC3; /* boja linije */
+            top: 143px; /* pozicija od vrha */
+            left: 115px; /* početak horizontalne linije */
+            animation: extendLine 1s 3.6s forwards; /* Extend the line smoothly after 3s */
+        }
+        @keyframes extendLine {
+            0% {
+                width: 350px;
+            }
+            100% {
+                width: 80%; /* Extend to 80% width of the screen */
+            }
+        }
+        .line-horizontal:after {
+            content: '';
+            border-radius: 50%;
+            width: 15px;
+            height: 22px;
+            background: #fff;
+            position: absolute;
+            top: 0px;
+            right: -8px;
+        }
+        /* Krug na kraju linije */
+        .circle {
+            position: absolute;
+            width: 30px; /* širina kruga */
+            height: 30px; /* visina kruga */
+            background-color: #14AEC3; /* boja kruga */
+            border-radius: 50%; /* pravimo krug */
+            top: 138px; /* pozicija kruga */
+            left: 482px; 
+           /*left: calc(115px); /* Podešeno da ostane na kraju linije */
+            transform: translateX(-50%); /* Centriranje kruga na kraju linije */
+            animation: moveCircle 1s 3.6s forwards; /* Move the circle */
+        }
+        @keyframes moveCircle {
+            0% {
+                left: calc(115px + 350px);
+            }
+            100% {
+                left: calc(115px + 80%); /* Pomeri da prati proširenje linije */
+            }
+        }
+        /* Dodajemo masku za brisanje */
+        .mask {
+            position: absolute;
+            height: 220px; /* Visina maske koja je ista kao i line-container */
+            width: 0; /* Početna širina je 0 */
+            background-color: white; /* Boja maske koja briše */
+            top: 0;
+            left: 0;
+            z-index: 2; /* Preko linije da bi je sakrila */
+            animation: maskAnimation .3s 4.7s forwards; /* Aktivira se posle 5 sekundi */
+        }
+        @keyframes maskAnimation {
+            0% {
+                width: 0;
+            }
+            100% {
+                width: 100%; /* Pokrije celu širinu line-container */
+            }
+        }
+/* Default boja za prvu liniju */
+#line-1 .line-left,
+#line-1 .line-horizontal,
+#line-1 .circle {
+    background-color: #14AEC3;
+}
+/* Druga linija */
+#line-2 .line-left,
+#line-2 .line-horizontal,
+#line-2 .circle {
+    background-color: #E3644B;
+}
+/* Treća linija */
+#line-3 .line-left,
+#line-3 .line-horizontal,
+#line-3 .circle {
+    background-color: #41A000;
+}
+</style>
+<script>
+function animateLines() {
+    let currentLine = 1
+    const totalLines = 3
+    function showLine(lineNumber) {
+        const line = document.getElementById(`line-${lineNumber}`)
+        line.style.display = 'block'
+        // Pokreni animaciju
+        line.querySelector('.line-abs').style.animation = 'animateWidth 1.2s forwards'
+        //line.querySelector('.line-left').style.filter = 'blur(2px)'
+        line.querySelector('.line-horizontal').style.animation = 'extendLine 1s 3.6s forwards'
+       // line.querySelector('.line-horizontal').style.filter = 'blur(2px)'
+        line.querySelector('.circle').style.animation = 'moveCircle 1s 3.6s forwards'
+        //line.querySelector('.circle').style.filter = 'blur(2px)'
+        line.querySelector('.mask').style.animation = 'maskAnimation .3s 5.7s forwards'
+    }
+    function hideLine(lineNumber) {
+        const line = document.getElementById(`line-${lineNumber}`)
+        line.style.display = 'none'
+    }
+    function nextLine() {
+        hideLine(currentLine)
+        currentLine++
+        if (currentLine > totalLines) {
+            currentLine = 1 // Restart to first line
+        }
+        showLine(currentLine)
+        setTimeout(nextLine, 5000) // Postavi timeout za sljedeću liniju (5s ukupno)
+    }
+    // Pokreni prvu liniju
+    showLine(currentLine)
+    // Nakon 6 sekundi, pređi na sljedeću liniju
+    setTimeout(nextLine, 5000)
+}
+// Pokreni animaciju linija kada je stranica učitana
+window.onload = animateLines
+</script>
